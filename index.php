@@ -1,18 +1,8 @@
-<?php
-include 'conecto.php';
+<?php include "./header.php"; 
+require_once "./conecto.php";
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/1.css">
-    <title>Prueba</title>
-</head>
-<body>
-    <!-- Button trigger modal -->
+
+
     <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
       nuevo ticket
     </button>
@@ -42,7 +32,7 @@ include 'conecto.php';
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submint" class="btn btn-primary">Enviar</button>
+            <button type="submit" class="btn btn-primary">Enviar</button>
           </div>
 
           </form>
@@ -52,7 +42,7 @@ include 'conecto.php';
     
 
     <div class="table-responsive">
-      <table class="table">
+      <table class="table" id="tabla">
         <thead>
           <tr>
             <th scope="col">Id</th>
@@ -91,10 +81,36 @@ include 'conecto.php';
     
         // Use above variables to manipulate the DOM
       });
+
+
+      $(document).ready(function(){
+    var table = $('#tabla').DataTable({
+       orderCellsTop: true,
+       fixedHeader: true 
+    });
+
+    //Creamos una fila en el head de la tabla y lo clonamos para cada columna
+    $('#tabla thead tr').clone(true).appendTo( '#tabla thead' );
+
+    $('#tabla thead tr:eq(1) th').each( function (i) {
+        var title = $(this).text(); //es el nombre de la columna
+        $(this).html( '<input type="text" placeholder="Search...'+title+'" />' );
+ 
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );   
+});
+
+
     </script>
     
+      <?php
+    require_once "scripts.php"; ?> 
+    
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-</body>
-</html>
